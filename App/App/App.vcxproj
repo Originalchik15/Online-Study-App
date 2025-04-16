@@ -127,7 +127,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsoleUI.cpp" />
+    <ClCompile Include="Course.cpp" />
+    <ClCompile Include="CourseService.cpp" />
+    <ClCompile Include="FileCourseRepository.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="User.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ConsoleUI.hpp" />
+    <ClInclude Include="Course.hpp" />
+    <ClInclude Include="CourseRepository.hpp" />
+    <ClInclude Include="CourseService.hpp" />
+    <ClInclude Include="Exceptions.hpp" />
+    <ClInclude Include="FileCourseRepository.hpp" />
+    <ClInclude Include="User.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
