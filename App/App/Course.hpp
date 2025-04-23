@@ -1,37 +1,43 @@
-#pragma once 
+#pragma once
+
 #include <string>
 #include <vector>
-#include <stdexcept>
 
 using std::string;
-
+// Класс Course: модель курса с жизненным циклом и материалами
 class Course {
 public:
-	enum class Status {Draft, UndreReview, Published, Archived, Deleted};
+    enum class Status { Draft, UnderReview, Published, Archived, Deleted };
 
-	Course(const string& id, const string& title, const string& description);
+    // Конструктор
+    Course(const std::string& id,
+        const std::string& title,
+        const std::string& description);
 
-	const string& getId() const;
-	const string& getTitle() const;
-	const string& getDescription() const;
-	Status getStatus() const;
-	const std::vector<string>& getMaterials() const;
+    // Геттеры
+    const std::string& getId() const;
+    const std::string& getTitle() const;
+    const std::string& getDescription() const;
+    Status getStatus() const;
+    const std::vector<std::string>& getMaterials() const;
 
-	void setTitle(const string& newTitle);
-	void setDescription(const string& newDescription);
-	void addMaterial(const string& materialPath);
+    // Модификация данных
+    void setTitle(const std::string& newTitle);
+    void setDescription(const std::string& newDescription);
+    void addMaterial(const std::string& materialPath);
 
-	void submitForReviev();
-	void approve();
-	void reject();
-	void archive();
-	void restore();
-	void remove();
+    // Методы перехода статусов
+    void submitForReview();
+    void approve();
+    void reject();
+    void archive();
+    void restore();
+    void remove();
 
 private:
-	string id_;
-	string title_;
-	string description_;
-	std::vector<string> materials_;
-	Status status_;
+    std::string id_;
+    std::string title_;
+    std::string description_;
+    std::vector<std::string> materials_;
+    Status status_;
 };
