@@ -1,24 +1,30 @@
+// User.hpp
 #pragma once
+
 #include <string>
-#include <stdexcept>
 #include "Course.hpp"
 
 class User {
 public:
-	enum class Role{ Student, Teacher, Admin};
+    enum class Role { Student, Teacher, Admin };
 
-	User(const string& id, const string& name, Role role);
-	
-	const string& getId() const;
-	const string& getName() const;
-	Role getRole() const;
+    User(const std::string& id, const std::string& name, Role role);
 
-	bool canCreateCourse() const;
-	bool canEditCourse(const Course& course) const;
-	bool canDeleteCourse(const Course& course) const;
-	bool canViewCourse(const Course& course) const;
+    const std::string& getId() const;
+    const std::string& getName() const;
+    Role getRole() const;
+
+    bool canCreateCourse() const;
+    bool canEditCourse(const Course& course) const;
+    bool canDeleteCourse(const Course& course) const;
+    bool canViewCourse(const Course& course) const;
+
+    // Новые методы для аутентификации
+    static std::string roleToString(Role r);
+    static Role        stringToRole(const std::string& s);
+
 private:
-	string id_;
-	string name_;
-	Role role_;
+    std::string id_;
+    std::string name_;
+    Role        role_;
 };

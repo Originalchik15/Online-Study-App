@@ -1,9 +1,8 @@
 #include "CourseService.hpp"
 #include <stdexcept>
 #include <algorithm>
-#include <chrono>
-
 #include <iterator>
+#include <vector>
 
 CourseService::CourseService(std::unique_ptr<CourseRepository> repo)
     : repo_(std::move(repo)) {
@@ -14,13 +13,29 @@ Course CourseService::createCourse(const User& user,
     const std::string& description) {
     authorizeCreate(user);
     validateCourseData(title, description);
-    auto now = std::chrono::system_clock::now().time_since_epoch().count();
-    std::string id = std::to_string(now);
+
+    // 1. Получаем все курсы и вычисляем следующий ID
+    auto all = repo_->findAll();
+    long nextId = 1;
+    for (auto& c : all) {
+        // предполагаем, что старые ID — это строки, содержащие целые числа
+        try {
+            long idNum = std::stol(c.getId());
+            if (idNum >= nextId) nextId = idNum + 1;
+        }
+        catch (...) {
+            // если не получилось конвертировать — пропускаем
+        }
+    }
+
+    // 2. Формируем строковый ID
+    std::string id = std::to_string(nextId);
+
+    // 3. Создаём и сохраняем курс
     Course course(id, title, description);
     repo_->add(course);
-    return course; 
+    return course;
 }
-
 
 void CourseService::editCourse(const User& user,
     const std::string& courseId,
@@ -56,37 +71,30 @@ std::vector<Course> CourseService::listAllCourses(const User& user) {
     return result;
 }
 
-// Приватные методы
 void CourseService::authorizeCreate(const User& user) {
-    if (!user.canCreateCourse()) {
-        throw std::runtime_error("User is not authorized to create courses");
-    }
+    if (!user.canCreateCourse())
+        throw std::runtime_error("User not authorized to create courses");
 }
 
 void CourseService::authorizeEdit(const User& user, const Course& course) {
-    if (!user.canEditCourse(course)) {
-        throw std::runtime_error("User is not authorized to edit this course");
-    }
+    if (!user.canEditCourse(course))
+        throw std::runtime_error("User not authorized to edit this course");
 }
 
 void CourseService::authorizeDelete(const User& user, const Course& course) {
-    if (!user.canDeleteCourse(course)) {
-        throw std::runtime_error("User is not authorized to delete this course");
-    }
+    if (!user.canDeleteCourse(course))
+        throw std::runtime_error("User not authorized to delete this course");
 }
 
 void CourseService::authorizeView(const User& user, const Course& course) {
-    if (!user.canViewCourse(course)) {
-        throw std::runtime_error("User is not authorized to view this course");
-    }
+    if (!user.canViewCourse(course))
+        throw std::runtime_error("User not authorized to view this course");
 }
 
 void CourseService::validateCourseData(const std::string& title,
     const std::string& description) {
-    if (title.empty()) {
+    if (title.empty())
         throw std::runtime_error("Course title cannot be empty");
-    }
-    if (description.empty()) {
+    if (description.empty())
         throw std::runtime_error("Course description cannot be empty");
-    }
 }

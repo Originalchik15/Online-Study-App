@@ -1,27 +1,31 @@
 #pragma once
 
 #include "CourseService.hpp"
+#include "RequestService.hpp"
+#include "User.hpp"
+#include <string>
 
-// Консольный интерфейс для взаимодействия с пользователем
 class ConsoleUI {
 public:
-    explicit ConsoleUI(CourseService& service, const User& currentUser);
+    ConsoleUI(CourseService& courseSvc,
+        RequestService& requestSvc,
+        const User& currentUser);
 
-    // Запуск основного цикла приложения
     void run();
 
 private:
-    CourseService& service_;
+    CourseService& courseService_;
+    RequestService& requestService_;
     User currentUser_;
-    // Отображение меню и обработка выбора
+
     void showMainMenu() const;
     void handleCreate();
     void handleEdit();
     void handleDelete();
     void handleView();
     void handleList();
+    void handleListRequests();
 
-    // Вспомогательные функции ввода
     std::string promptString(const std::string& prompt) const;
     void pause() const;
 };

@@ -3,13 +3,10 @@
 #include <string>
 #include <vector>
 
-using std::string;
-// Класс Course: модель курса с жизненным циклом и материалами
 class Course {
 public:
     enum class Status { Draft, UnderReview, Published, Archived, Deleted };
 
-    // Конструктор
     Course(const std::string& id,
         const std::string& title,
         const std::string& description);
@@ -21,18 +18,21 @@ public:
     Status getStatus() const;
     const std::vector<std::string>& getMaterials() const;
 
-    // Модификация данных
+    // Изменение полей
     void setTitle(const std::string& newTitle);
     void setDescription(const std::string& newDescription);
     void addMaterial(const std::string& materialPath);
 
-    // Методы перехода статусов
+    // Переходы статуса
     void submitForReview();
     void approve();
     void reject();
     void archive();
     void restore();
     void remove();
+
+    // Прямое задание статуса (для восстановления из БД)
+    void setStatus(Status newStatus);
 
 private:
     std::string id_;
